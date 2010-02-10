@@ -1,0 +1,54 @@
+#summary Frequently Asked Questions
+<wiki:toc max_depth="2" />
+
+== What is it? ==
+This tool makes it possible to install additional certificates on Nokia S40 phones that make it possible to run signed (by a CA of your choice) MIDlet suites in the trusted third party security domain. By default only a limited number of CAs are included in the phone. The included CAs all require (yearly) payments (around $200 a year) to obtain a signing certificate.
+
+== Why did you create this? ==
+I was interested in analyzing the security of the Nokia S40 platform as part of writing my thesis.
+
+== Is this legal? ==
+Well, IANAL, but as far as I know when you buy a phone it becomes your
+property and you can do whatever you want with it. I'm not sure this holds
+when you take the DMCA into consideration.
+
+== What platforms are supported? ==
+Basically everything that supports Java. We tested this on Windows (32 bit),
+Mac OS X 10.6 and Linux (Ubuntu and Fedora, 32 and 64 bit).
+
+== Is there a command line version? ==
+Yes, there is. Run the class `net.tuxed.nokicert.NokiCertMain`.
+
+== What are the requirements? ==
+You need to have a Bluetooth adapter supported by your operating system.
+
+== What phones are supported? ==
+I would say most Nokia S40 phones (both using little endian and big endian
+CPUs) should be supported. See SupportedPhones for an up to date list of 
+phones.
+ 
+== I installed a certificate but it is not added to the list, what's up? ==
+Some (older) phones do not support certificates with a modulus > 1024 bits.
+Try to install a certificate with a smaller modulus (i.e. 1024 bits) and see
+if that works.
+
+== Does this application support the Symbian/S60 platform? ==
+I don't know, I don't have access to such a device.
+
+== I get Java back traces on Linux, what is up? ==
+The BlueCove library is packaged a bit strange. It requires `libbluetooth.so`
+which usually only part of the development package of the Bluetooth library
+(package `libbluetooth-dev` on Debian/Ubuntu). Installing this will make it work.
+
+== Something went terribly wrong, your program ate my cat! ==
+As the GPL license states, you used this program without any warranty!
+
+== I'm running on Windows 64 bit and it doesn't work?! ==
+The Bluecove library from the project does not support 64 bit Windows (yet),
+thus you will have to install the 32 bit Java environment and modify the
+NokiCert.cmd file to point to `C:\Program Files (x86)\Java\Jre6\bin\java`
+instead of just `java` as the 32 bit Java is not available in the `PATH` on
+a 64 bit system.
+
+Or, if you are bold, recompile Bluecove on your 64 bit Windows to make it
+work with that.
