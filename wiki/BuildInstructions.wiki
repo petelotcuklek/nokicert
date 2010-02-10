@@ -5,7 +5,8 @@
 == Requirements ==
   * Ant
   * Java 6 (Sun or OpenJDK)
-  * [http://www.bluecove.org BlueCove] Bluetooth Java library
+  * [http://www.bluecove.org BlueCove] Bluetooth Java library (`bluecove.jar`)
+    * For Linux you also need `bluecove-gpl.jar` and `bluecove-bluez.jar`
   * [http://www.eclipse.org/swt SWT] (graphics library for your platform)
 
 == Building NokiCert ==
