@@ -1,0 +1,20 @@
+#summary Build instructions for NokiCert
+
+<wiki:toc max_depth="2" />
+
+== Requirements ==
+  * Ant
+  * Java 6 (Sun or OpenJDK)
+  * [http://www.bluecove.org BlueCove] Bluetooth Java library
+  * [http://www.eclipse.org/swt SWT] (graphics library for your platform)
+
+== Building NokiCert ==
+
+Generic instructions:
+{{{
+$ ant doc dist \
+    -Dbluecove.jar=/path/to/bluecove-VERSION.jar \
+    -Dswt.jar=/path/to/swt-PLATFORM-VERSION.jar
+}}}
+
+This compiles both NokiCert and creates the API documentation.
