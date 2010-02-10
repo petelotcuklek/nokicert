@@ -9,7 +9,7 @@
     * For Linux you also need `bluecove-gpl.jar` and `bluecove-bluez.jar`
   * [http://www.eclipse.org/swt SWT] (graphics library for your platform)
 
-== Building NokiCert ==
+== Building ==
 
 Generic instructions:
 {{{
@@ -19,3 +19,10 @@ $ ant doc dist \
 }}}
 
 This compiles both NokiCert and creates the API documentation.
+
+== Running ==
+
+The directory `scripts` of the source package and SVN repository contains launch scripts 
+for different platforms. They set the correct `CLASSPATH` before launching the 
+`net.tuxed.nokicert.NokiCertGUI` class. These scripts are used by the binary release, so
+one will have to modify the paths to the supporting libraries.
