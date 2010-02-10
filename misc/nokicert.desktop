@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=NokiCert
+GenericName=NokiCert X.509 Certificate Installer
+Comment=Installs X.509 certificates for code signing on Nokia S40 phones
+Exec=nokicert-gui
+Icon=nokicert
+Terminal=false
+Type=Application
+Categories=System;
+
