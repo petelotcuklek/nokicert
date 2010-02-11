@@ -27,7 +27,7 @@ I would say most Nokia S40 phones (both using little endian and big endian
 CPUs) should be supported. See SupportedPhones for an up to date list of 
 phones.
  
-== I installed a certificate but it is not added to the list, what's up? ==
+== I installed a certificate but it is not added to the list or the phone says it is broken, what's up? ==
 Some (older) phones do not support certificates with a modulus > 1024 bits.
 Try to install a certificate with a smaller modulus (i.e. 1024 bits) and see
 if that works.
