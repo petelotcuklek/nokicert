@@ -1,6 +1,6 @@
 #summary List of supported phones
 
-This is an (incomplete) list of supported phones.
+This is an (incomplete) list of supported phones. Most phones will probably work.
 
 || *Model*            || *Supported* || *Remarks*                                ||
 || Nokia 2330 Classic || Yes         || -                                        ||
