@@ -57,4 +57,4 @@ work with that.
 Software like [http://www.eclipse.org/dsdp/mtj/ Eclipse MTJ] or [http://netbeans.org/features/javame/ NetBeans Java ME] can do that for you when creating Jave ME applications. If you prefer Ant and the command line you can take a look at [http://code.google.com/p/nfcip-java/downloads/list MIDletSuiteCreator].
 
 == Do you have an example signed MIDlet suite? ==
-Yes. If you install the [http://www.cacert.org/index.php?id=3 CAcert certificate] in your phone, you can try the NokiCert Demo MIDlet suite that can be found in the [http://code.google.com/p/nokicert/downloads/list Downloads] section.
+Yes. If you install the [http://www.cacert.org/index.php?id=3 CAcert certificate] in your phone, you can try the NokiCert Demo MIDlet suite that can be found in the [http://code.google.com/p/nokicert/downloads/list Downloads] section. It is signed by a (already revoked) code signing certificate I obtained through CAcert. However, Nokia phones don't check the revocation list so it keeps working :)
