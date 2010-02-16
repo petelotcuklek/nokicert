@@ -16,6 +16,8 @@ when you take the DMCA into consideration.
 Basically everything that supports Java. We tested this on Windows (32 bit),
 Mac OS X 10.6 and Linux (Ubuntu and Fedora, 32 and 64 bit).
 
+Mac OS X 10.5 seems to have a problem. The `-d32` option doesn't seem to work there (to run Java in 32. Not sure how to fix this as I don't have a Mac OS X 10.5 installation available. Bluecove only has a 32 bit library for Mac.
+
 == Is there a command line version? ==
 Yes, there is. Run the class `net.tuxed.nokicert.NokiCertMain`.
 
