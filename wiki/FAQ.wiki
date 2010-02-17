@@ -48,20 +48,13 @@ I don't know, I don't have access to such a device.
 == I get Java back traces on Linux, what is up? ==
 The BlueCove library is packaged a bit strange. It requires `libbluetooth.so`
 which usually only part of the development package of the Bluetooth library
-(package `libbluetooth-dev` on Debian/Ubuntu). Installing this will make it work.
+(package `libbluetooth-dev` on Debian/Ubuntu, `bluez-libs-devel` on Fedora). Installing this will make it work.
 
 == Something went terribly wrong, your program ate my cat! ==
 As the GPL license states, you used this program without any warranty!
 
 == I'm running on Windows 64 bit and it doesn't work?! ==
-The Bluecove library from the project does not support 64 bit Windows (yet),
-thus you will have to install the 32 bit Java environment and modify the
-NokiCert.cmd file to point to `C:\Program Files (x86)\Java\Jre6\bin\java`
-instead of just `java` as the 32 bit Java is not available in the `PATH` on
-a 64 bit system.
-
-Or, if you are bold, recompile Bluecove on your 64 bit Windows to make it
-work with that.
+Install the 32 bit Java Runtime Environment (JRE).
 
 == How do I create a signed MIDlet suite? ==
 Software like [http://www.eclipse.org/dsdp/mtj/ Eclipse MTJ] or [http://netbeans.org/features/javame/ NetBeans Java ME] can do that for you when creating Jave ME applications. If you prefer Ant and the command line you can take a look at [http://code.google.com/p/nfcip-java/downloads/list MIDletSuiteCreator].
