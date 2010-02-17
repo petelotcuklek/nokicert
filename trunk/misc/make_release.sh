@@ -36,7 +36,7 @@ SWT_MAC_FILE=`basename ${SWT_MAC_URL}`
 
 rm -rf /tmp/pkg_nokicert
 mkdir -p /tmp/pkg_nokicert/nokicert-${VERSION}-bin
-cp NokiCert.sh NokiCert-*.cmd /tmp/pkg_nokicert/nokicert-${VERSION}-bin
+cp NokiCert.sh NokiCert.cmd /tmp/pkg_nokicert/nokicert-${VERSION}-bin
 cd /tmp/pkg_nokicert
 mkdir lib/
 cd lib/
