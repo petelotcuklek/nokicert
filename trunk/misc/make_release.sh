@@ -6,6 +6,10 @@ else
 	VERSION=$1
 fi
 
+# Relevant documents for src/bin package
+SRC_DOCS="FAQ SupportedPhones Configuration BuildInstructions"
+BIN_DOCS="FAQ SupportedPhones Configuration"
+
 # BlueCove
 BLUECOVE_URL=http://snapshot.bluecove.org/distribution/download/2.1.1-SNAPSHOT/2.1.1-SNAPSHOT.60/bluecove-2.1.1-SNAPSHOT.jar
 BLUECOVE_GPL_URL=http://snapshot.bluecove.org/distribution/download/2.1.1-SNAPSHOT/2.1.1-SNAPSHOT.60/bluecove-gpl-2.1.1-SNAPSHOT.jar
@@ -60,8 +64,14 @@ svn export http://nokicert.googlecode.com/svn/wiki wiki-${VERSION}
 
 # NokiCert
 svn export http://nokicert.googlecode.com/svn/trunk/ nokicert-${VERSION}
-# add docs to source package
-cp -r wiki-${VERSION} nokicert-${VERSION}/docs
+# add relevant docs to source package
+mkdir -p docs/
+for f in $SRC_DOCS
+do
+        cp -r ../wiki-${VERSION}/$f.wiki docs/
+        mv docs/$f.wiki docs/`basename docs/$f.wiki .wiki`
+done
+
 zip -r nokicert-${VERSION}-src.zip nokicert-${VERSION}
 cd nokicert-${VERSION}
 ant doc dist -Dversion=${VERSION} -Dbluecove.jar=../lib/bluecove.jar -Dswt.jar=../lib/swt.jar
@@ -74,8 +84,13 @@ cd nokicert-${VERSION}-bin
 cp ../lib/bluecove.jar .
 cp ../nokicert-${VERSION}/dist/nokicert-${VERSION}.jar nokicert.jar
 
-# add docs to binary package
-cp -r ../wiki-${VERSION} docs
+# add relevant docs to binary package
+mkdir -p docs/
+for f in $BIN_DOCS
+do
+	cp -r ../wiki-${VERSION}/$f.wiki docs/
+	mv docs/$f.wiki docs/`basename docs/$f.wiki .wiki`
+done
 
 # Win32
 mkdir -p win32
