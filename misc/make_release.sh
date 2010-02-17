@@ -36,7 +36,7 @@ SWT_MAC_FILE=`basename ${SWT_MAC_URL}`
 
 rm -rf /tmp/pkg_nokicert
 mkdir -p /tmp/pkg_nokicert/nokicert-${VERSION}-bin
-cp NokiCert-*.sh NokiCert-*.cmd /tmp/pkg_nokicert/nokicert-${VERSION}-bin
+cp NokiCert.sh NokiCert-*.cmd /tmp/pkg_nokicert/nokicert-${VERSION}-bin
 cd /tmp/pkg_nokicert
 mkdir lib/
 cd lib/
@@ -64,6 +64,7 @@ svn export http://nokicert.googlecode.com/svn/wiki wiki-${VERSION}
 
 # NokiCert
 svn export http://nokicert.googlecode.com/svn/trunk/ nokicert-${VERSION}
+cd nokicert-${VERSION}
 # add relevant docs to source package
 mkdir -p docs/
 for f in $SRC_DOCS
@@ -71,8 +72,10 @@ do
         cp -r ../wiki-${VERSION}/$f.wiki docs/
         mv docs/$f.wiki docs/`basename docs/$f.wiki .wiki`
 done
+cd ..
 
 zip -r nokicert-${VERSION}-src.zip nokicert-${VERSION}
+
 cd nokicert-${VERSION}
 ant doc dist -Dversion=${VERSION} -Dbluecove.jar=../lib/bluecove.jar -Dswt.jar=../lib/swt.jar
 cd ..
@@ -104,17 +107,17 @@ cd mac
 unzip ../../lib/${SWT_MAC_FILE} swt.jar
 cd ..
 
-# Linux32
-mkdir -p linux32
-cd linux32
+# Linux-i686
+mkdir -p linux-i686
+cd linux-i686
 cp ../../lib/bluecove-gpl.jar .
 cp ../../lib/bluecove-bluez.jar .
 unzip ../../lib/${SWT_LINUX32_FILE} swt.jar
 cd ..
 
-# Linux64
-mkdir -p linux64
-cd linux64
+# Linux-x86_64
+mkdir -p linux-x86_64
+cd linux-x86_64
 cp ../../lib/bluecove-gpl.jar .
 cp ../../lib/bluecove-bluez.jar .
 unzip ../../lib/${SWT_LINUX64_FILE} swt.jar
