@@ -7,6 +7,7 @@
   * Java 6 (Sun or OpenJDK)
   * [http://www.bluecove.org BlueCove] Bluetooth Java library (`bluecove.jar`)
     * For Linux you also need `bluecove-gpl.jar` and `bluecove-bluez.jar`
+  * [http://iharder.sourceforge.net/current/java/base64/ Base64 Java library]
   * [http://www.eclipse.org/swt SWT] (graphics library for your platform)
 
 == Building ==
@@ -15,7 +16,8 @@ Generic instructions:
 {{{
 $ ant doc dist \
     -Dbluecove.jar=/path/to/bluecove-VERSION.jar \
-    -Dswt.jar=/path/to/swt-PLATFORM-VERSION.jar
+    -Dswt.jar=/path/to/swt-PLATFORM-VERSION.jar \
+    -Dbase64.jar=/path/to/base64-VERSION.jar
 }}}
 
 This compiles both NokiCert and creates the API documentation.
@@ -23,6 +25,4 @@ This compiles both NokiCert and creates the API documentation.
 == Running ==
 
 The directory `misc` of the source package and SVN repository contains launch scripts 
-for different platforms. They set the correct `CLASSPATH` before launching the 
-`net.tuxed.nokicert.NokiCertGUI` class. These scripts are used by the binary release, so
-one will have to modify the paths to the supporting libraries.
+for both Windows and Linux/Mac/BSD platforms. They set the correct `CLASSPATH` before launching the `net.tuxed.nokicert.NokiCertGUI` class. These scripts are used by the binary release, so one will have to modify the paths to the supporting libraries.
