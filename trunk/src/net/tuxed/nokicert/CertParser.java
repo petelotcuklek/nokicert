@@ -100,10 +100,14 @@ public class CertParser {
 			String base64cert = new String();
 			if (s.matches("-----BEGIN CERTIFICATE-----")) {
 				/* PEM formatted */
+				boolean endOfLoop = false;
 				do {
 					s = br.readLine();
-					base64cert += s;
-				} while (!s.matches("-----END CERTIFICATE-----"));
+					System.out.println(s);
+					endOfLoop = s.matches("-----END CERTIFICATE-----");
+					if(!endOfLoop)
+						base64cert += s;
+				} while (!endOfLoop);
 				/* convert Base64 encoded string to binary */
 				inStream = new ByteArrayInputStream(Base64.decode(base64cert));
 			} else {
