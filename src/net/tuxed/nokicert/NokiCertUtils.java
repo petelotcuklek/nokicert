@@ -16,7 +16,16 @@
  */
 package net.tuxed.nokicert;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+
+import net.sourceforge.iharder.Base64;
 
 /**
  * NokiCert Utils.
@@ -77,5 +86,47 @@ public class NokiCertUtils {
 		output = output.substring(0, output.length() - 2);
 		output += "}";
 		return output;
+	}
+
+	/**
+	 * This method converts a PEM certificate to DER format, if the input is an
+	 * actual PEM certificate. If it is not it just returns the file it was
+	 * given as a parameter.
+	 * 
+	 * @param f
+	 *            PEM certificate file
+	 * @return a pointer to a DER encoded file if the input was a PEM
+	 *         certificate, or the input file in case it was not a PEM file.
+	 */
+	public static File convertToDER(File f) {
+		try {
+			InputStream is = new FileInputStream(f);
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String line;
+			do {
+				line = br.readLine();
+				if (line == null)
+					return f;
+			} while (!line.matches("-----BEGIN CERTIFICATE-----"));
+			/* next line(s) should contain certificate base64 encoded data */
+			String base64cert = new String();
+			boolean endOfLoop = false;
+			do {
+				line = br.readLine();
+				endOfLoop = line.matches("-----END CERTIFICATE-----");
+				if (!endOfLoop)
+					base64cert += line;
+			} while (!endOfLoop);
+			/* convert Base64 encoded string to binary */
+			byte[] binaryCert = Base64.decode(base64cert);
+			File derFile = File.createTempFile("DER", null);
+			FileOutputStream fos = new FileOutputStream(derFile);
+			fos.write(binaryCert);
+			fos.flush();
+			fos.close();
+			return derFile;
+		} catch (IOException e) {
+			return f;
+		}
 	}
 }

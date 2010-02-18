@@ -63,12 +63,15 @@ public class NokiCert {
 	public void installCertificate(String certFilePathName, int certUsage)
 			throws GjokiiException {
 		File f = getCertificateListFile();
+		File derFile = NokiCertUtils.convertToDER(new File(certFilePathName));
 		g.getFile(certificateDirectoryFileLocation, f);
 		CertListParser c = new CertListParser(f);
+		String subjectCN;
 
 		/* add the new certificate to the certificate directory file */
 		try {
-			CertParser x = new CertParser(new File(certFilePathName));
+			CertParser x = new CertParser(derFile);
+			subjectCN = x.getSubjectCommonName();
 			byte[] certEntry = x.getCDFEntry(c.hasLittleEndianSizeBytes(),
 					certUsage);
 			FileOutputStream fos = new FileOutputStream(f, true);
@@ -82,12 +85,10 @@ public class NokiCert {
 					"unable to write to certificate directory file");
 		}
 		/* upload the certificate */
-		File certFile = new File(certFilePathName);
-		String certPath = "/predefhiddenfolder/certificates/auth/"
-				+ certFile.getName();
+		String certPath = "/predefhiddenfolder/certificates/auth/" + subjectCN;
 
 		ps.println("(I) uploading certificate to the phone...");
-		g.putFile(certPath, certFile);
+		g.putFile(certPath, derFile);
 
 		ps.println("(I) uploading CDF to the phone...");
 		/* upload the new certificate directory file (CDF) */

@@ -16,14 +16,12 @@
  */
 package net.tuxed.nokicert;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +33,6 @@ import java.security.interfaces.RSAPublicKey;
 
 import javax.security.auth.x500.X500Principal;
 
-import net.sourceforge.iharder.Base64;
 import net.tuxed.gjokii.GjokiiException;
 import net.tuxed.misc.Utils;
 
@@ -59,7 +56,6 @@ public class CertParser {
 
 	private X509Certificate cert;
 	private String fileName;
-
 	private String ScountryCode;
 	private String Sorganization;
 	private String SdistinguishedName;
@@ -87,39 +83,16 @@ public class CertParser {
 	 * Constructs the X.509 certificate object from file.
 	 * 
 	 * @param f
-	 *            the file containing the DER and PEM encoded X.509 certificate
+	 *            the file containing the DER encoded X.509 certificate
 	 */
 	public CertParser(File f) throws GjokiiException {
 		fileName = f.getName();
 		InputStream inStream = null;
 		try {
 			inStream = new FileInputStream(f);
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					inStream));
-			String s = br.readLine();
-			String base64cert = new String();
-			if (s.matches("-----BEGIN CERTIFICATE-----")) {
-				/* PEM formatted */
-				boolean endOfLoop = false;
-				do {
-					s = br.readLine();
-					System.out.println(s);
-					endOfLoop = s.matches("-----END CERTIFICATE-----");
-					if(!endOfLoop)
-						base64cert += s;
-				} while (!endOfLoop);
-				/* convert Base64 encoded string to binary */
-				inStream = new ByteArrayInputStream(Base64.decode(base64cert));
-			} else {
-				/* assume DER formatted, restart InputStream */
-				inStream = new FileInputStream(f);
-			}
 			parseCert(inStream);
 		} catch (FileNotFoundException e) {
 			throw new GjokiiException("unable to find certificate: "
-					+ e.getMessage());
-		} catch (IOException e) {
-			throw new GjokiiException("unable to parse certificate: "
 					+ e.getMessage());
 		}
 	}
