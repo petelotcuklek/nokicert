@@ -35,6 +35,7 @@ import java.security.interfaces.RSAPublicKey;
 
 import javax.security.auth.x500.X500Principal;
 
+import net.sourceforge.iharder.Base64;
 import net.tuxed.gjokii.GjokiiException;
 import net.tuxed.misc.Utils;
 
@@ -104,8 +105,7 @@ public class CertParser {
 					base64cert += s;
 				} while (!s.matches("-----END CERTIFICATE-----"));
 				/* convert Base64 encoded string to binary */
-				inStream = new ByteArrayInputStream(
-						net.sourceforge.iharder.Base64.decode(base64cert));
+				inStream = new ByteArrayInputStream(Base64.decode(base64cert));
 			} else {
 				/* assume DER formatted, restart InputStream */
 				inStream = new FileInputStream(f);
@@ -115,7 +115,8 @@ public class CertParser {
 			throw new GjokiiException("unable to find certificate: "
 					+ e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new GjokiiException("unable to parse certificate: "
+					+ e.getMessage());
 		}
 	}
 
