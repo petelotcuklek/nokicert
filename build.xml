@@ -12,6 +12,7 @@
 	<path id="project.classpath">
 		<pathelement location="${bluecove.jar}" />
 		<pathelement location="${swt.jar}" />
+		<pathelement location="${base64.jar}" />
 	</path>
 
 	<!-- init -->
@@ -24,11 +25,13 @@
 
 	<!-- compile -->
 	<target name="compile" depends="init" description="compile the source">
-	        <!-- we need the following libraries for a successful build -->
-	        <fail unless="bluecove.jar"
-	              message="ERROR: specify location of BlueCove library (e.g.: -Dbluecove.jar=/path/to/bluecove-VERSION.jar)" />
-	        <fail unless="swt.jar"
-	              message="ERROR: specify location of SWT library (e.g.: -Dswt.jar=/path/to/swt-PLATFORM-VERSION.jar)" />
+		<!-- we need the following libraries for a successful build -->
+		<fail unless="bluecove.jar"
+		      message="ERROR: specify location of BlueCove library (e.g.: -Dbluecove.jar=/path/to/bluecove-VERSION.jar)" />
+		<fail unless="swt.jar"
+		      message="ERROR: specify location of SWT library (e.g.: -Dswt.jar=/path/to/swt-PLATFORM-VERSION.jar)" />
+		<fail unless="base64.jar"
+		      message="ERROR: specify location of Base64 library (e.g.: -Dbase64.jar=/path/to/base64-VERSION.jar)" />
 
 		<javac srcdir="${src}"
 		       destdir="${build}"

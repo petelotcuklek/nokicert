@@ -177,7 +177,7 @@ public class NokiCertGUI {
 								"X.509 DER encoded Certificates",
 								"All Files (*)" };
 						String[] filterExtensions = new String[] {
-								"*.cer;*.der;*.crt", "*" };
+								"*.cer;*.der;*.crt;*.pem", "*" };
 						String filterPath = System.getProperty("user.home");
 						dialog.setFilterNames(filterNames);
 						dialog.setFilterExtensions(filterExtensions);

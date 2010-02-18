@@ -27,6 +27,7 @@ import net.tuxed.misc.Utils;
 public class NokiCertMain {
 
 	private static final int NO_MODE = -1;
+	private static final int CERT_INFO = 7;
 	private static final int LIST_CERT = 0;
 	private static final int INST_CERT = 1;
 	private static final int IDENTIFY = 5;
@@ -56,7 +57,6 @@ public class NokiCertMain {
 		String deviceAddress = null;
 		String phoneFilePathName = null;
 
-		boolean verbose = false;
 		int mode = -1;
 		/*
 		 * try to get the device hardware address and channel from configuration
@@ -92,6 +92,11 @@ public class NokiCertMain {
 				}
 			}
 
+			if (args[i].equals("--cert-info") || args[i].equals("-C")) {
+				mode = CERT_INFO;
+				phoneFilePathName = args[++i];
+			}
+
 			if (args[i].equals("--list-certs") || args[i].equals("-l")) {
 				mode = LIST_CERT;
 			}
@@ -113,13 +118,9 @@ public class NokiCertMain {
 				showHelp();
 				System.exit(0);
 			}
-
-			if (args[i].equals("--verbose") || args[i].equals("-v")) {
-				verbose = true;
-			}
 		}
 		if (mode == NO_MODE) {
-			System.err.println("(E) no mode specified, see --help:\n");
+			System.err.println("(E) no operation specified, see --help:\n");
 			System.exit(1);
 		}
 		if (deviceAddress == null || channelNumber == -1) {
@@ -131,9 +132,12 @@ public class NokiCertMain {
 			System.err.println("(E) no certificate specified, see --help:\n");
 			System.exit(1);
 		}
-
+		if (mode == CERT_INFO && phoneFilePathName.length() == 0) {
+			System.err.println("(E) no certificate specified, see --help:\n");
+			System.exit(1);
+		}
 		try {
-			g = new Gjokii(deviceAddress, channelNumber, verbose);
+			// g = new Gjokii(deviceAddress, channelNumber, verbose);
 			NokiCert n = new NokiCert(g, ps);
 
 			switch (mode) {
@@ -155,6 +159,11 @@ public class NokiCertMain {
 				n.installCertificate(phoneFilePathName,
 						NokiCertUtils.APPS_SIGNING);
 				break;
+			case CERT_INFO:
+				ps.println("(I) Showing Certificate Info...");
+				CertParser cp = new CertParser(new File(phoneFilePathName));
+				ps.println(cp);
+				break;
 			}
 			g.close();
 		} catch (GjokiiException e) {
@@ -168,8 +177,10 @@ public class NokiCertMain {
 		output += "Basic:\n";
 		output += "  -d, --device <hwaddr>      Specify the Bluetooth device (e.g.: 001122334455)\n";
 		output += "  -c, --channel <channel>    Specify the Bluetooth channel (e.g.: 15)\n";
+		output += "Operations:\n";
 		output += "  -i, --identify             Print phone identification\n";
 		output += "  -r, --reboot               Reboot the phone\n";
+		output += "  -C, --cert-info <cert>     Show information about certificate\n";
 		output += "  -l, --list-cert            List the certificates installed on the phone\n";
 		output += "  -I, --install-cert <cert>  Install an X.509 certificate on the phone\n";
 		output += "  -v, --verbose              Increase verbosity\n";

@@ -21,6 +21,9 @@ SWT_LINUX32_URL=http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/dow
 SWT_LINUX64_URL=http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops/R-3.5.1-200909170800/swt-3.5.1-gtk-linux-x86_64.zip
 SWT_MAC_URL=http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops/R-3.5.1-200909170800/swt-3.5.1-cocoa-macosx.zip
 
+# Base64 Java Library
+B64_URL=http://downloads.sourceforge.net/iharder/Base64-v2.3.7.zip
+
 BLUECOVE_FILE=`basename ${BLUECOVE_URL}`
 BLUECOVE_GPL_FILE=`basename ${BLUECOVE_GPL_URL}`
 BLUECOVE_BLUEZ_FILE=`basename ${BLUECOVE_BLUEZ_URL}`
@@ -29,6 +32,8 @@ SWT_WIN32_FILE=`basename ${SWT_WIN32_URL}`
 SWT_LINUX32_FILE=`basename ${SWT_LINUX32_URL}`
 SWT_LINUX64_FILE=`basename ${SWT_LINUX64_URL}`
 SWT_MAC_FILE=`basename ${SWT_MAC_URL}`
+
+B64_FILE=`basename ${B64_URL}`
 
 # For building it doesn't matter what platform of SWT/Bluecove is 
 # used, we just use the WIN32 swt for compiling. For packaging we need
@@ -55,8 +60,15 @@ curl -O ${SWT_LINUX32_URL}
 curl -O ${SWT_LINUX64_URL}
 curl -O ${SWT_MAC_URL}
 
+echo "curl -O ${B64_URL}"
+curl -L -O ${B64_URL}
+
 # unpack one of them for building, doesn't matter which one
 unzip ${SWT_WIN32_FILE} swt.jar
+
+# unpack Base64 lib
+unzip ${B64_FILE}
+cp `basename ${B64_FILE} .zip`/Base64.java Base64.java
 cd ../
 
 # Wiki
@@ -77,7 +89,12 @@ cd ..
 zip -r nokicert-${VERSION}-src.zip nokicert-${VERSION}
 
 cd nokicert-${VERSION}
-ant doc dist -Dversion=${VERSION} -Dbluecove.jar=../lib/bluecove.jar -Dswt.jar=../lib/swt.jar
+# add Base64 java class in the project
+mkdir -p src/net/sourceforge/iharder
+echo "package net.sourceforge.iharder;" >src/net/sourceforge/iharder/Base64.java
+cat ../lib/Base64.java >> src/net/sourceforge/iharder/Base64.java
+rm ../lib/Base64.java
+ant doc dist -Dversion=${VERSION} -Dbase64.jar=. -Dbluecove.jar=../lib/bluecove.jar -Dswt.jar=../lib/swt.jar
 cd ..
 
 # Packaging

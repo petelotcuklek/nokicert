@@ -16,12 +16,14 @@
  */
 package net.tuxed.nokicert;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -84,17 +86,36 @@ public class CertParser {
 	 * Constructs the X.509 certificate object from file.
 	 * 
 	 * @param f
-	 *            the file containing the DER encoded X.509 certificate
+	 *            the file containing the DER and PEM encoded X.509 certificate
 	 */
 	public CertParser(File f) throws GjokiiException {
 		fileName = f.getName();
 		InputStream inStream = null;
 		try {
 			inStream = new FileInputStream(f);
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					inStream));
+			String s = br.readLine();
+			String base64cert = new String();
+			if (s.matches("-----BEGIN CERTIFICATE-----")) {
+				/* PEM formatted */
+				do {
+					s = br.readLine();
+					base64cert += s;
+				} while (!s.matches("-----END CERTIFICATE-----"));
+				/* convert Base64 encoded string to binary */
+				inStream = new ByteArrayInputStream(
+						net.sourceforge.iharder.Base64.decode(base64cert));
+			} else {
+				/* assume DER formatted, restart InputStream */
+				inStream = new FileInputStream(f);
+			}
 			parseCert(inStream);
 		} catch (FileNotFoundException e) {
 			throw new GjokiiException("unable to find certificate: "
 					+ e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
