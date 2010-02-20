@@ -4,8 +4,8 @@
 
 Release: _not released yet_
  
-  * make it possible to directly install PEM formatted certificates instead of only DER formatted certificates
-  * base name of certificate on phone on the common name of the certificate subject
+  * Make it possible to directly install PEM formatted certificates instead of only DER formatted certificates
+  * Base name of certificate on phone on the common name of the certificate subject
 
 == 0.3.0 ==
 
