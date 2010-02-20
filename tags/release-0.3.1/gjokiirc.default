@@ -1,0 +1,9 @@
+# Gjokii Configuration File
+
+# Phone Bluetooth Hardware Address (See *#2820# on the phone) or 
+# use "hcitool scan"
+device=001122334455
+
+# Channel to connect to. This should be Nokia PC Suite channel, which
+# can be found by using "sdptool search"
+channel = 15
