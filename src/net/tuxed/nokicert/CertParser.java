@@ -55,7 +55,6 @@ public class CertParser {
 			(byte) 0x05, (byte) 0x07, (byte) 0x03, (byte) 0x01 };
 
 	private X509Certificate cert;
-	private String fileName;
 	private String ScountryCode;
 	private String Sorganization;
 	private String SdistinguishedName;
@@ -86,7 +85,6 @@ public class CertParser {
 	 *            the file containing the DER encoded X.509 certificate
 	 */
 	public CertParser(File f) throws GjokiiException {
-		fileName = f.getName();
 		InputStream inStream = null;
 		try {
 			inStream = new FileInputStream(f);
@@ -120,9 +118,12 @@ public class CertParser {
 		output = Utils.appendToByteArray(output, new byte[20]);
 		output = Utils.appendToByteArray(output, getSubjectHash());
 		output = Utils.appendToByteArray(output, getIssuerHash());
-		output = Utils.appendToByteArray(output,
-				new byte[] { (byte) ((byte) getFileName().length() + 1) });
-		output = Utils.appendToByteArray(output, getFileName().getBytes());
+		output = Utils
+				.appendToByteArray(output,
+						new byte[] { (byte) ((byte) getSubjectCommonName()
+								.length() + 1) });
+		output = Utils.appendToByteArray(output, getSubjectCommonName()
+				.getBytes());
 		output = Utils.appendToByteArray(output, new byte[2]); /* separator */
 
 		byte[] keyUsage = new byte[1]; /* first byte contains length */
@@ -162,15 +163,6 @@ public class CertParser {
 		sizeBytes = Utils.appendToByteArray(sizeBytes, new byte[2]);
 		output = Utils.appendToByteArray(sizeBytes, output);
 		return output;
-	}
-
-	/**
-	 * Get the file name of the certificate
-	 * 
-	 * @return the file name
-	 */
-	public String getFileName() {
-		return fileName;
 	}
 
 	/**
