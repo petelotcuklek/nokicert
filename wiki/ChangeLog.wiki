@@ -2,8 +2,9 @@
 
 == 0.3.2 ==
 
-Released: _N/A_
+Released: _20100220_
 
+  * Add README to binary distribution
   * Include [ChangeLog] in released source code and binary
   * Limit line length to 80 characters in documentation extracted from Wiki
 
