@@ -7,8 +7,8 @@ else
 fi
 
 # Relevant documents for src/bin package
-SRC_DOCS="FAQ SupportedPhones Configuration BuildInstructions"
-BIN_DOCS="FAQ SupportedPhones Configuration"
+SRC_DOCS="FAQ SupportedPhones Configuration BuildInstructions ChangeLog"
+BIN_DOCS="FAQ SupportedPhones Configuration ChangeLog"
 
 # BlueCove
 BLUECOVE_URL=http://snapshot.bluecove.org/distribution/download/2.1.1-SNAPSHOT/2.1.1-SNAPSHOT.60/bluecove-2.1.1-SNAPSHOT.jar
@@ -81,8 +81,7 @@ cd nokicert-${VERSION}
 mkdir -p docs/
 for f in $SRC_DOCS
 do
-        cp -r ../wiki-${VERSION}/$f.wiki docs/
-        mv docs/$f.wiki docs/`basename docs/$f.wiki .wiki`
+	fold -s -w80 ../wiki-${VERSION}/$f.wiki > docs/$f
 done
 cd ..
 
@@ -105,11 +104,11 @@ cp ../lib/bluecove.jar .
 cp ../nokicert-${VERSION}/dist/nokicert-${VERSION}.jar nokicert.jar
 
 # add relevant docs to binary package
+cp ../nokicert-${VERSION}/misc/README.binary README
 mkdir -p docs/
 for f in $BIN_DOCS
 do
-	cp -r ../wiki-${VERSION}/$f.wiki docs/
-	mv docs/$f.wiki docs/`basename docs/$f.wiki .wiki`
+        fold -s -w80 ../wiki-${VERSION}/$f.wiki > docs/$f
 done
 
 # Win32
