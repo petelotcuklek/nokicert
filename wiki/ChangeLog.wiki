@@ -1,5 +1,12 @@
 #summary NokiCert ChangeLog
 
+== 0.3.2 ==
+
+Released: _N/A_
+
+  * Include [ChangeLog] in released source code and binary
+  * Limit line length to 80 characters in documentation extracted from Wiki
+
 == 0.3.1 ==
 
 Released: _20100220_
