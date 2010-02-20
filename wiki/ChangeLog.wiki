@@ -2,8 +2,11 @@
 
 == 0.3.1 ==
 
-Released: _not released yet_
- 
+Released: _N/A_
+  
+  * Better error handling in case some Bluetooth issues arise
+  * Unify the Linux/Mac run scripts
+  * Try to make Windows script run on 64 bit systems if 32 bit Java is installed as well
   * Make it possible to directly install PEM formatted certificates instead of only DER formatted certificates
   * Base name of certificate on phone on the common name of the certificate subject
 
