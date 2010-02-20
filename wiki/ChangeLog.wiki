@@ -2,13 +2,13 @@
 
 == 0.3.1 ==
 
-Release: _not released yet_
+Released: _not released yet_
  
   * Make it possible to directly install PEM formatted certificates instead of only DER formatted certificates
   * Base name of certificate on phone on the common name of the certificate subject
 
 == 0.3.0 ==
 
-Release: _20100210_
+Released: _20100210_
 
   * Initial release
