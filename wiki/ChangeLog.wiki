@@ -2,7 +2,7 @@
 
 == 0.3.1 ==
 
-Released: _N/A_
+Released: _20100220_
   
   * Better error handling in case some Bluetooth issues arise
   * Unify the Linux/Mac run scripts
