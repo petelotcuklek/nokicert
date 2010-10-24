@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NokiCert.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.tuxed.nokicert;
+package net.tuxed.nokiroot;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,12 +24,10 @@ import net.tuxed.gjokii.Gjokii;
 import net.tuxed.gjokii.GjokiiException;
 import net.tuxed.misc.Utils;
 
-public class NokiCertMain {
+public class NokiRootMain {
 
 	private static final int NO_MODE = -1;
-	private static final int CERT_INFO = 7;
-	private static final int LIST_CERT = 0;
-	private static final int INST_CERT = 1;
+	private static final int LIST_APPS = 1;
 	private static final int IDENTIFY = 5;
 	private static final int REBOOT = 6;
 
@@ -86,24 +84,14 @@ public class NokiCertMain {
 					channelNumber = Integer.parseInt(args[++i]);
 				} catch (NumberFormatException e) {
 					/*
-					 * the channelNumber will remain -1, we'll find this out
-					 * later anyway
+					 * the channelNumber will remain -1, we'll detect this later
+					 * anyway
 					 */
 				}
 			}
 
-			if (args[i].equals("--cert-info") || args[i].equals("-C")) {
-				mode = CERT_INFO;
-				phoneFilePathName = args[++i];
-			}
-
-			if (args[i].equals("--list-certs") || args[i].equals("-l")) {
-				mode = LIST_CERT;
-			}
-
-			if (args[i].equals("--install-cert") || args[i].equals("-I")) {
-				mode = INST_CERT;
-				phoneFilePathName = args[++i];
+			if (args[i].equals("--list-apps") || args[i].equals("-a")) {
+				mode = LIST_APPS;
 			}
 
 			if (args[i].equals("--identify") || args[i].equals("-i")) {
@@ -128,18 +116,11 @@ public class NokiCertMain {
 					.println("(E) no device and/or channel specified, see --help:\n");
 			System.exit(1);
 		}
-		if (mode == INST_CERT && phoneFilePathName.length() == 0) {
-			System.err.println("(E) no certificate specified, see --help:\n");
-			System.exit(1);
-		}
-		if (mode == CERT_INFO && phoneFilePathName.length() == 0) {
-			System.err.println("(E) no certificate specified, see --help:\n");
-			System.exit(1);
-		}
+
 		try {
 			/* FIXME: add verbose command line parsing */
 			g = new Gjokii(deviceAddress, channelNumber, false);
-			NokiCert n = new NokiCert(g, ps);
+			NokiRoot n = new NokiRoot(g, ps);
 
 			switch (mode) {
 			case IDENTIFY:
@@ -151,19 +132,9 @@ public class NokiCertMain {
 				ps.println("(I) Rebooting Phone...");
 				g.reboot();
 				break;
-			case LIST_CERT:
-				ps.println("(I) List Certificates...");
-				ps.println(n.listCertificates());
-				break;
-			case INST_CERT:
-				ps.println("(I) Installing Certificate...");
-				n.installCertificate(phoneFilePathName,
-						NokiCertUtils.APPS_SIGNING);
-				break;
-			case CERT_INFO:
-				ps.println("(I) Showing Certificate Info...");
-				CertParser cp = new CertParser(new File(phoneFilePathName));
-				ps.println(cp);
+			case LIST_APPS:
+				ps.println("(I) List Applications...");
+				ps.println(n.listApplicationDomains());
 				break;
 			}
 			g.close();
@@ -181,12 +152,9 @@ public class NokiCertMain {
 		output += "Operations:\n";
 		output += "  -i, --identify             Print phone identification\n";
 		output += "  -r, --reboot               Reboot the phone\n";
-		output += "  -C, --cert-info <cert>     Show information about certificate\n";
-		output += "  -l, --list-cert            List the certificates installed on the phone\n";
-		output += "  -I, --install-cert <cert>  Install an X.509 certificate on the phone\n";
+		output += "  -a, --list-apps            List installed applications\n";
 		output += "  -v, --verbose              Increase verbosity\n";
 		output += "  -h, --help                 Show this help message\n";
 		ps.println(output);
 	}
-
 }
