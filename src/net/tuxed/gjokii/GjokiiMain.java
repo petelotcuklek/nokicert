@@ -123,8 +123,7 @@ public class GjokiiMain {
 		 * file
 		 */
 		if (configFile == null) {
-			ps
-					.println("(W) unable to find configuration file, use command line parameter overrides");
+			ps.println("(W) unable to find configuration file, use command line parameter overrides");
 		} else {
 			try {
 				deviceAddress = Utils.getConfigEntry(configFile, "device");
@@ -254,9 +253,7 @@ public class GjokiiMain {
 				g.reboot();
 				break;
 			case LIST_DIRECTORY:
-				ps
-						.println("(I) Directory Listing of " + phoneDirPathName
-								+ ":");
+				ps.println("(I) Directory Listing of " + phoneDirPathName + ":");
 				dirList(phoneDirPathName, recursive);
 				break;
 			case DUMP_FS:

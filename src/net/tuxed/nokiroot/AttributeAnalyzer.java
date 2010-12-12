@@ -32,7 +32,10 @@ import net.tuxed.misc.Utils;
  * 
  */
 public class AttributeAnalyzer {
-	private TreeMap<Byte, TreeMap<Byte, byte[]>> suiteMap = new TreeMap<Byte, TreeMap<Byte, byte[]>>();
+	/**
+	 * suiteNumber, { attributeNumber, { dataOffset, data }}
+	 */
+	private TreeMap<Byte, TreeMap<Byte, Object[]>> suiteMap = new TreeMap<Byte, TreeMap<Byte, Object[]>>();
 
 	/**
 	 * Analyze given file for specified platform
@@ -43,10 +46,11 @@ public class AttributeAnalyzer {
 	public AttributeAnalyzer(File f) {
 		/* first we split the list in its various entries */
 		try {
+			int offsetInFile = 0;
 			FileInputStream fis = new FileInputStream(f);
 			while (fis.available() > 4) {
 				byte[] lengthBytes = new byte[4];
-				fis.read(lengthBytes);
+				offsetInFile += fis.read(lengthBytes);
 				int size = Utils.byteArrayToIntLE(lengthBytes, 0);
 				byte[] dataBytes = new byte[size - 4];
 				fis.read(dataBytes);
@@ -55,7 +59,7 @@ public class AttributeAnalyzer {
 
 				byte suiteNumber = dataBytes[0];
 				int numberOfFields = Utils.byteArrayToIntLE(dataBytes, 4);
-				TreeMap<Byte, byte[]> attribMap = new TreeMap<Byte, byte[]>();
+				TreeMap<Byte, Object[]> attribMap = new TreeMap<Byte, Object[]>();
 				int offset = (numberOfFields + 1) * 8;
 
 				for (int i = 0; i < numberOfFields; i++) {
@@ -63,10 +67,12 @@ public class AttributeAnalyzer {
 					byte attrType = dataBytes[i * 8 + 12];
 					byte[] content = new byte[attrSize];
 					System.arraycopy(dataBytes, offset, content, 0, attrSize);
-					attribMap.put(attrType, content);
+					attribMap.put(attrType, new Object[] {
+							offsetInFile + offset, content });
 					offset += attrSize;
 				}
 				suiteMap.put(suiteNumber, attribMap);
+				offsetInFile += size - 4;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -80,7 +86,7 @@ public class AttributeAnalyzer {
 	 * 
 	 * @return the map
 	 */
-	public TreeMap<Byte, TreeMap<Byte, byte[]>> getMap() {
+	public TreeMap<Byte, TreeMap<Byte, Object[]>> getMap() {
 		return suiteMap;
 	}
 
@@ -88,13 +94,13 @@ public class AttributeAnalyzer {
 	public String toString() {
 		String output = "";
 		/* for every suite */
-		for (Entry<Byte, TreeMap<Byte, byte[]>> e : suiteMap.entrySet()) {
+		for (Entry<Byte, TreeMap<Byte, Object[]>> e : suiteMap.entrySet()) {
 			byte suiteNumber = e.getKey();
 			output += "[" + suiteNumber + "]:\n";
 			/* for every attribute */
-			for (Entry<Byte, byte[]> g : e.getValue().entrySet()) {
+			for (Entry<Byte, Object[]> g : e.getValue().entrySet()) {
 				byte key = g.getKey();
-				byte[] byteAttributeValue = g.getValue();
+				byte[] byteAttributeValue = (byte[]) g.getValue()[1];
 				String attributeValue = null;
 				/*
 				 * we can convert some attribute values to human readable text

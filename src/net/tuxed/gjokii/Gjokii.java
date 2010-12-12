@@ -269,8 +269,9 @@ public class Gjokii {
 							+ d.getEntryName();
 					File newDir = new File(newDirPathName);
 					newDir.mkdir();
-					dumpFileSystem(newDirPathName, phoneDirPathName
-							+ d.getEntryName() + "/", recursive);
+					dumpFileSystem(newDirPathName,
+							phoneDirPathName + d.getEntryName() + "/",
+							recursive);
 
 					/* retail file/date of file */
 					newDir.setLastModified(d.getEntryTimeStamp());

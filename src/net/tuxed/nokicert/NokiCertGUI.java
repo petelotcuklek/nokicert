@@ -135,13 +135,12 @@ public class NokiCertGUI {
 						Label l = new Label(dialog, SWT.BORDER);
 						Button b = new Button(dialog, SWT.NONE);
 						b.setText("OK");
-						b
-								.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-									public void widgetSelected(
-											org.eclipse.swt.events.SelectionEvent e) {
-										dialog.close();
-									}
-								});
+						b.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+							public void widgetSelected(
+									org.eclipse.swt.events.SelectionEvent e) {
+								dialog.close();
+							}
+						});
 						try {
 							String certList = nokiCert.listCertificates();
 							if (certList != null && certList.length() != 0)
@@ -232,13 +231,12 @@ public class NokiCertGUI {
 						Label l = new Label(dialog, SWT.BORDER);
 						Button b = new Button(dialog, SWT.NONE);
 						b.setText("OK");
-						b
-								.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-									public void widgetSelected(
-											org.eclipse.swt.events.SelectionEvent e) {
-										dialog.close();
-									}
-								});
+						b.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+							public void widgetSelected(
+									org.eclipse.swt.events.SelectionEvent e) {
+								dialog.close();
+							}
+						});
 						CertParser x = null;
 						try {
 							if (certFilePathName != null) {
