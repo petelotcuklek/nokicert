@@ -88,7 +88,7 @@ public class NokiRoot {
 		File[] appFiles = getApplicationDomainFiles();
 
 		AttributeAnalyzer aA = new AttributeAnalyzer(appFiles[0]);
-		TreeMap<Byte, TreeMap<Byte, byte[]>> tA = aA.getMap();
+		TreeMap<Byte, TreeMap<Byte, Object[]>> tA = aA.getMap();
 
 		ListAnalyzer lA = new ListAnalyzer(appFiles[1]);
 		TreeMap<Byte, Object[]> tL = lA.getMap();
@@ -98,15 +98,17 @@ public class NokiRoot {
 		 * "Security Domain" attribute and map it to the name of the MIDlet
 		 * suite from the list map...
 		 */
-		for (Entry<Byte, TreeMap<Byte, byte[]>> e : tA.entrySet()) {
-			for (Entry<Byte, byte[]> g : e.getValue().entrySet()) {
+		for (Entry<Byte, TreeMap<Byte, Object[]>> e : tA.entrySet()) {
+			for (Entry<Byte, Object[]> g : e.getValue().entrySet()) {
 				if (g.getKey() == 0x04) {
 					/* 0x04 is the code for Security Domain */
-					byte[] secDomArr = g.getValue();
+					byte[] secDomArr = (byte[]) g.getValue()[1];
+					int offsetInAttributeFile = (Integer) g.getValue()[0];
 					String securityDomain = NokiRootUtils.domainToString(
 							secDomArr[0], false);
 					String suiteName = (String) tL.get(e.getKey())[2];
-					ps.println(suiteName + ": " + securityDomain);
+					ps.println(suiteName + ": " + securityDomain + " (offset: "
+							+ Integer.toHexString(offsetInAttributeFile) + ")");
 				}
 			}
 		}

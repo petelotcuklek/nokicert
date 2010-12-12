@@ -63,8 +63,7 @@ public class NokiCertMain {
 		 * file
 		 */
 		if (configFile == null) {
-			ps
-					.println("(W) unable to find configuration file, use command line parameter overrides");
+			ps.println("(W) unable to find configuration file, use command line parameter overrides");
 		} else {
 			try {
 				deviceAddress = Utils.getConfigEntry(configFile, "device");
