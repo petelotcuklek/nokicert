@@ -27,7 +27,8 @@ import net.tuxed.misc.Utils;
 public class NokiRootMain {
 
 	private static final int NO_MODE = -1;
-	private static final int LIST_APPS = 1;
+	private static final int LIST_MIDLET_SUITES = 1;
+	private static final int MODIFY_MIDLET_SUITE = 2;
 	private static final int IDENTIFY = 5;
 	private static final int REBOOT = 6;
 
@@ -53,7 +54,10 @@ public class NokiRootMain {
 
 		int channelNumber = -1;
 		String deviceAddress = null;
-		String phoneFilePathName = null;
+		// String phoneFilePathName = null;
+
+		byte suiteNumber = -1;
+		byte securityDomain = -1;
 
 		int mode = -1;
 		/*
@@ -89,8 +93,21 @@ public class NokiRootMain {
 				}
 			}
 
-			if (args[i].equals("--list-apps") || args[i].equals("-a")) {
-				mode = LIST_APPS;
+			if (args[i].equals("--list-midlet-suites") || args[i].equals("-l")) {
+				mode = LIST_MIDLET_SUITES;
+			}
+
+			if (args[i].equals("--modify-midlet-suite") || args[i].equals("-m")) {
+				mode = MODIFY_MIDLET_SUITE;
+				try {
+					suiteNumber = (byte) Integer.parseInt(args[++i]);
+					securityDomain = (byte) Integer.parseInt(args[++i], 16);
+				} catch (NumberFormatException e) {
+					/*
+					 * the suiteNumber and securityDomain will remain -1, we'll
+					 * detect this later anyway
+					 */
+				}
 			}
 
 			if (args[i].equals("--identify") || args[i].equals("-i")) {
@@ -107,12 +124,19 @@ public class NokiRootMain {
 			}
 		}
 		if (mode == NO_MODE) {
-			System.err.println("(E) no operation specified, see --help:\n");
+			System.err.println("(E) no operation specified, see --help\n");
 			System.exit(1);
 		}
 		if (deviceAddress == null || channelNumber == -1) {
 			System.err
-					.println("(E) no device and/or channel specified, see --help:\n");
+					.println("(E) no device and/or channel specified, see --help\n");
+			System.exit(1);
+		}
+
+		if (mode == MODIFY_MIDLET_SUITE
+				&& (suiteNumber == -1 || securityDomain == -1)) {
+			System.err
+					.println("(E) invalid suiteNumber and/or securityDomain specified, see --help\n");
 			System.exit(1);
 		}
 
@@ -131,9 +155,14 @@ public class NokiRootMain {
 				ps.println("(I) Rebooting Phone...");
 				g.reboot();
 				break;
-			case LIST_APPS:
-				ps.println("(I) List Applications...");
+			case LIST_MIDLET_SUITES:
+				ps.println("(I) List MIDlet suites...");
 				ps.println(n.listApplicationDomains());
+				break;
+
+			case MODIFY_MIDLET_SUITE:
+				ps.println("(I) Modify MIDlet suite...");
+				n.modifyApplicationDomains(suiteNumber, securityDomain);
 				break;
 			}
 			g.close();
@@ -151,7 +180,9 @@ public class NokiRootMain {
 		output += "Operations:\n";
 		output += "  -i, --identify             Print phone identification\n";
 		output += "  -r, --reboot               Reboot the phone\n";
-		output += "  -a, --list-apps            List installed applications\n";
+		output += "  -l, --list-midlet-suites   List installed MIDlet suites\n";
+		output += "  -m, --modify-midlet-suite\n";
+		output += "           <#suite> <domain> Modify the security domain of MIDlet suite\n";
 		output += "  -v, --verbose              Increase verbosity\n";
 		output += "  -h, --help                 Show this help message\n";
 		ps.println(output);

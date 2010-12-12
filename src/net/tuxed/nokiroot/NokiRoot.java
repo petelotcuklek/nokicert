@@ -19,8 +19,9 @@ package net.tuxed.nokiroot;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.TreeMap;
+import java.io.RandomAccessFile;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import net.tuxed.gjokii.Gjokii;
 import net.tuxed.gjokii.GjokiiException;
@@ -103,15 +104,66 @@ public class NokiRoot {
 				if (g.getKey() == 0x04) {
 					/* 0x04 is the code for Security Domain */
 					byte[] secDomArr = (byte[]) g.getValue()[1];
-					int offsetInAttributeFile = (Integer) g.getValue()[0];
 					String securityDomain = NokiRootUtils.domainToString(
 							secDomArr[0], false);
+					int suiteNumber = e.getKey();
 					String suiteName = (String) tL.get(e.getKey())[2];
-					ps.println(suiteName + ": " + securityDomain + " (offset: "
-							+ Integer.toHexString(offsetInAttributeFile) + ")");
+					ps.println("#" + suiteNumber + "\t[" + securityDomain
+							+ "] " + suiteName);
 				}
 			}
 		}
 		return "";
+	}
+
+	/**
+	 * Modify the security domain of the MIDlet suite.
+	 * 
+	 * @param suiteNumber
+	 *            the number of the MIDlet suite
+	 * @param securityDomain
+	 *            the security domain to modify to
+	 * @throws GjokiiException
+	 */
+	public void modifyApplicationDomains(int suiteNumber, byte securityDomain)
+			throws GjokiiException {
+		/* has to be valid suiteNumber and securityDomain */
+		File[] appFiles = getApplicationDomainFiles();
+
+		AttributeAnalyzer aA = new AttributeAnalyzer(appFiles[0]);
+		TreeMap<Byte, TreeMap<Byte, Object[]>> tA = aA.getMap();
+
+		ListAnalyzer lA = new ListAnalyzer(appFiles[1]);
+		TreeMap<Byte, Object[]> tL = lA.getMap();
+
+		for (Entry<Byte, TreeMap<Byte, Object[]>> e : tA.entrySet()) {
+			for (Entry<Byte, Object[]> g : e.getValue().entrySet()) {
+				if (g.getKey() == 0x04 && e.getKey() == suiteNumber) {
+					byte[] secDomArr = (byte[]) g.getValue()[1];
+					int offsetInAttributeFile = (Integer) g.getValue()[0];
+					String currentSecurityDomain = NokiRootUtils
+							.domainToString(secDomArr[0], false);
+					String newSecurityDomain = NokiRootUtils.domainToString(
+							securityDomain, false);
+					String suiteName = (String) tL.get(e.getKey())[2];
+					ps.println("#" + suiteNumber + "\t["
+							+ currentSecurityDomain + " --> "
+							+ newSecurityDomain + "] " + suiteName);
+					/* modify the file at the security domain offset */
+					try {
+						RandomAccessFile raf = new RandomAccessFile(
+								appFiles[0], "rw");
+						raf.seek(offsetInAttributeFile);
+						raf.writeByte(securityDomain);
+						raf.close();
+					} catch (IOException ioe) {
+						throw new GjokiiException(
+								"unable to modify the attribute file");
+					}
+				}
+			}
+		}
+		ps.println("(I) Uploading attribute file...");
+		g.putFile(attributeFileLocation, appFiles[0]);
 	}
 }

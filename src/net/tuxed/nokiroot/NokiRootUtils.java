@@ -33,15 +33,15 @@ public class NokiRootUtils {
 		String o = printNumber ? "[" + Utils.byteToString(t) + "] " : "";
 		switch (t) {
 		case (byte) 0x20:
-			return o + "Manufacturer";
+			return o + "Manufacturer            ";
 		case (byte) 0x02:
-			return o + "Identified Third Party";
+			return o + "Identified Third Party  ";
 		case (byte) 0x01:
 			return o + "Unidentified Third Party";
 		case (byte) 0x10:
-			return o + "Operator";
+			return o + "Operator                ";
 		default:
-			return o + "Unknown Domain";
+			return o + "Unknown Domain          ";
 		}
 	}
 
